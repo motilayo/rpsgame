@@ -8,33 +8,34 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'Rock Paper Scissors Game';
   username: string;
-  userScore= 0;
+  userScore = 0;
   computerScore = 0;
-  options = ["rock", "paper", "scissors"]
+  options = ['rock', 'paper', 'scissors'];
   userChoice: string;
   computerChoice: string;
   outcome: string;
-  
 
+  // tslint:disable-next-line: typedef
   setComputerChoice(){
-    const index = Math.floor(Math.random() * 2)
-    this.computerChoice = this.options[index]
+    const index = Math.floor(Math.random() * 2);
+    this.computerChoice = this.options[index];
   }
 
+  // tslint:disable-next-line: typedef
   userChoose(choice: string){
-    this.setComputerChoice()
-    this.userChoice = choice
-    console.log(this.computerChoice)
-    this.evaluate()
+    this.setComputerChoice();
+    this.userChoice = choice;
+    console.log(this.computerChoice);
+    this.evaluate();
   }
 
   evaluate(){
-    switch(this.userChoice+this.computerChoice){
+    switch (this.userChoice + this.computerChoice){
       case 'rockpaper':
-        this.outputA()
+        this.outputA();
         break;
       case 'rockscissors':
-        this.outputB()
+        this.outputB();
         break;
       case 'paperrock':
         this.outputB();
