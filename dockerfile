@@ -1,12 +1,11 @@
 # Stage 1
 FROM node as build-prod
-RUN mkdir -p /app
-WORKDIR /app
-COPY package.json /app
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
 RUN npm install
-COPY . /app
+COPY . .
 RUN npm run build --prod
 
 # Stage 2
 FROM nginx
-COPY --from=build-prod /app/docs /usr/share/nginx/html
+COPY --from=build-prod /usr/src/app/dist/rpsgame/ /usr/share/nginx/html
