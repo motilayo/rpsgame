@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ main ]
 
+
 jobs:
 
   build:
@@ -15,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --tag rpsgame:$(date +%s)
+      run: docker build . --tag jm98/rpsgame:v1.1
