@@ -1,4 +1,26 @@
 import { Component } from '@angular/core';
+import {Subject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {NgbAlert} from '@ng-bootstrap/ng-bootstrap';
+
+
+interface Alert {
+  type: string;
+  message: string;
+}
+
+const ALERTS: Alert[] = [{
+    type: 'success',
+    message: 'YOU WIN!',
+  }, {
+    type: 'warning',
+    message: 'DRAW',
+  }, {
+    type: 'danger',
+    message: 'YOU LOSE!',
+  }
+];
+
 
 @Component({
   selector: 'app-root',
@@ -6,6 +28,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  alerts: Alert[];
   title = 'Rock Paper Scissors Game';
   username: string;
   userScore = 0;
@@ -75,3 +98,5 @@ export class AppComponent {
     }, 1500);
   }
 }
+
+
