@@ -1,0 +1,27 @@
+.choice::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.choice {
+    transform: scale(0.25, 0.25);
+    -ms-transform: scale(0.25, 0.25);
+    -webkit-transform: scale(0.25, 0.25);
+    border: 0%;
+    float: left;
+    width: 33.33%;
+    margin: auto;
+}
+
+#rock {
+    filter: opacity(0.75) drop-shadow(0 0 0 grey);
+}
+
+#paper {
+    filter: opacity(0.75) drop-shadow(0 0 0 blue);
+}
+
+#scissors {
+    filter: opacity(0.75) drop-shadow(0 0 0 silver);
+}

@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "rpsgame"
+  "defaultProject": "rpsgame",
+  "cli": {
+    "analytics": "943bb2ec-85f7-4d18-bedd-4c0c35c04daf"
+  }
 }
