@@ -1,26 +1,10 @@
 import { Component } from '@angular/core';
-import {Subject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-import {NgbAlert} from '@ng-bootstrap/ng-bootstrap';
 
-
-interface Alert {
-  type: string;
-  message: string;
+export interface GameRound{
+  userPlay: string;
+  compPlay: string;
+  result: string;
 }
-
-const ALERTS: Alert[] = [{
-    type: 'success',
-    message: 'YOU WIN!',
-  }, {
-    type: 'warning',
-    message: 'DRAW',
-  }, {
-    type: 'danger',
-    message: 'YOU LOSE!',
-  }
-];
-
 
 @Component({
   selector: 'app-root',
@@ -28,7 +12,6 @@ const ALERTS: Alert[] = [{
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  alerts: Alert[];
   title = 'Rock Paper Scissors Game';
   username: string;
   userScore = 0;
@@ -37,6 +20,9 @@ export class AppComponent {
   userChoice: string;
   computerChoice: string;
   outcome: string;
+
+  tableColumns: string[] = ['You', 'Computer', 'Outcome'];
+  tableRow: GameRound[];
 
   // tslint:disable-next-line: typedef
   setComputerChoice(){
@@ -74,20 +60,25 @@ export class AppComponent {
         break;
       default:
         this.outcome = 'DRAW';
-        this.clear();
     }
+
+    this.tableRow.push({
+      userPlay: this.userChoice,
+      compPlay: this.computerChoice,
+      result: this.outcome
+    });
+
+    this.clear();
   }
 
   outputA(){
     this.computerScore ++;
     this.outcome = 'You Lose!';
-    this.clear();
   }
 
   outputB(){
     this.userScore ++;
     this.outcome = 'You win!';
-    this.clear();
   }
 
   clear(){

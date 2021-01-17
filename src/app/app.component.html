@@ -17,3 +17,21 @@
         <img src="../assets/images/scissors.png" width="75" height="75" (click)='userChoose("scissors")'>
     </div>
 </div>
+
+<table mat-table [dataSource]='tableRow' class="mat-elevation-z8">
+    <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef> Player </th>
+        <td mat-cell *matCellDef='let element'> {{element.userPlay}} </td>
+    </ng-container>
+    <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef> Player </th>
+        <td mat-cell *matCellDef='let element'> {{element.userPlay}} </td>
+    </ng-container>
+    <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef> Player </th>
+        <td mat-cell *matCellDef='let element'> {{element.userPlay}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+</table>
