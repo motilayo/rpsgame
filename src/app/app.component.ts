@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 export interface GameRound{
-  userPlay: string;
-  compPlay: string;
+  user: string;
+  computer: string;
   result: string;
 }
 
@@ -21,8 +21,8 @@ export class AppComponent {
   computerChoice: string;
   outcome: string;
 
-  tableColumns: string[] = ['You', 'Computer', 'Outcome'];
-  tableRow: GameRound[];
+  tableColumns: string[] = ['user', 'computer', 'result'];
+  tableRow: GameRound[] = [];
 
   // tslint:disable-next-line: typedef
   setComputerChoice(){
@@ -59,12 +59,12 @@ export class AppComponent {
         this.outputB();
         break;
       default:
-        this.outcome = 'DRAW';
+        this.outcome = 'DRAW!';
     }
 
     this.tableRow.push({
-      userPlay: this.userChoice,
-      compPlay: this.computerChoice,
+      user: this.userChoice,
+      computer: this.computerChoice,
       result: this.outcome
     });
 

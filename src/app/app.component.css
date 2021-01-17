@@ -56,3 +56,7 @@
     background: purple;
     font-size: 25px;
 }
+
+table {
+    width: 100%;
+}
