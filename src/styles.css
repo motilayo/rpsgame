@@ -8,7 +8,5 @@ body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
-    background-image: url("assets/images/rps.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: blanchedalmond;
 }
