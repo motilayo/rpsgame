@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import {
+  MatTableDataSource
+} from '@angular/material/table';
+
 
 export interface GameRound{
   user: string;
@@ -23,22 +27,23 @@ export class AppComponent {
 
   tableColumns: string[] = ['user', 'computer', 'result'];
   tableRow: GameRound[] = [];
+  dataSource = new MatTableDataSource<GameRound>(this.tableRow);
 
   // tslint:disable-next-line: typedef
-  setComputerChoice(){
+setComputerChoice(){
     const index = Math.floor(Math.random() * 2);
     this.computerChoice = this.options[index];
   }
 
   // tslint:disable-next-line: typedef
-  userChoose(choice: string){
+userChoose(choice: string){
     this.setComputerChoice();
     this.userChoice = choice;
     console.log(this.computerChoice);
     this.evaluate();
   }
 
-  evaluate(){
+evaluate(){
     switch (this.userChoice + this.computerChoice){
       case 'rockpaper':
         this.outputA();
@@ -67,27 +72,25 @@ export class AppComponent {
       computer: this.computerChoice,
       result: this.outcome
     });
-
+    this.dataSource.data = this.tableRow;
     this.clear();
   }
 
-  outputA(){
+outputA(){
     this.computerScore ++;
     this.outcome = 'You Lose!';
   }
 
-  outputB(){
+outputB(){
     this.userScore ++;
-    this.outcome = 'You win!';
+    this.outcome = 'You Win!';
   }
 
-  clear(){
+clear(){
     setTimeout(() => {
       this.userChoice = '';
       this.computerChoice = '';
       this.outcome = '';
-    }, 1500);
+    }, 1000);
   }
 }
-
-

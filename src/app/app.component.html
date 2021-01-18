@@ -1,26 +1,43 @@
-<div class="score-board">
-    <div class="badge" id="user-label">user : {{userChoice}}</div>
-    <div class="badge" id="comp-label">comp : {{computerChoice}}</div>
-    <div class="scoreboard" id="score">
-        <span id="user-score">{{userScore}}</span>:<span id="comp-score">{{computerScore}}</span>
-    </div>
-</div>
+<p>
+    <mat-toolbar color>
+        <span>Rock Paper Scissors Game</span>
+    </mat-toolbar>
+</p>
+
+<mat-grid-list cols="2" rowHeight="2:1">
+    <!-- <mat-grid-tile-header>SCORE</mat-grid-tile-header> -->
+    <mat-grid-tile>
+        <mat-card>
+            <mat-card-title>USER</mat-card-title>
+            <mat-card-content>{{userScore}}</mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card>
+            <mat-card-title>COMPUTER</mat-card-title>
+            <mat-card-content>{{computerScore}}</mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>
+
 
 <div class="choices">
     <div class="choice" id="rock">
-        <img src="../assets/images/rock.png" width="75" height="75" (click)='userChoose("rock")'>
+        <img src="../assets/images/rock.png " width="75 " height="75 " (click)='userChoose("rock")'>
     </div>
     <div class="choice" id="paper">
-        <img src="../assets/images/paper.png" width="75" height="75" (click)='userChoose("paper")'>
+        <img src="../assets/images/paper.png " width="75 " height="75 " (click)='userChoose("paper")'>
     </div>
     <div class="choice" id="scissors">
-        <img src="../assets/images/scissors.png" width="75" height="75" (click)='userChoose("scissors")'>
+        <img src="../assets/images/scissors.png " width="75 " height="75 " (click)='userChoose("scissors")'>
     </div>
 </div>
 
-<table mat-table [dataSource]='tableRow' class="mat-elevation-z8">
+<br/>
+
+<table mat-table [dataSource]='dataSource' class="mat-elevation-z8 ">
     <ng-container matColumnDef="user">
-        <th mat-header-cell *matHeaderCellDef> Player </th>
+        <th mat-header-cell *matHeaderCellDef> user </th>
         <td mat-cell *matCellDef='let element'> {{element.user}} </td>
     </ng-container>
     <ng-container matColumnDef="computer">
@@ -32,6 +49,6 @@
         <td mat-cell *matCellDef='let element'> {{element.result}} </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="tableColumns " style="background-color: #084075; "></tr>
+    <tr mat-row *matRowDef="let row; columns: tableColumns; " [ngClass]="{ 'lose': row.result=='You Lose!' , 'win':row.result=='You Win!' , 'draw': row.result=='DRAW!' } "></tr>
 </table>
