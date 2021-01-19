@@ -1,0 +1,21 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-demo
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: back-end
+          image: 146335578023.dkr.ecr.ca-central-1.amazonaws.com/motilayo/rpsgame:latest
+          ports:
+            - containerPort: 3000

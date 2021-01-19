@@ -87,10 +87,13 @@ outputB(){
   }
 
 clear(){
-    setTimeout(() => {
-      this.userChoice = '';
+    // setTimeout(() => {
+    //   this.userChoice = '';
+    //   this.computerChoice = '';
+    //   this.outcome = '';
+    // }, 1000);
+    this.userChoice = '';
       this.computerChoice = '';
       this.outcome = '';
-    }, 1000);
   }
 }

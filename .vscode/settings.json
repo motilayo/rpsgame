@@ -2,5 +2,7 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}",
         ".vscode{,/**}"
-    ]
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/ede15a5a-d8df-4ecd-805b-06bbce6e710c/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/rpsgame2",
+    "appService.deploySubpath": "dist\\rpsgame"
 }
