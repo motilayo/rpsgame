@@ -93,7 +93,7 @@ clear(){
     //   this.outcome = '';
     // }, 1000);
     this.userChoice = '';
-      this.computerChoice = '';
-      this.outcome = '';
+    this.computerChoice = '';
+    this.outcome = '';
   }
 }
