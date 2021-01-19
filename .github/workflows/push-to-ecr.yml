@@ -26,7 +26,7 @@ jobs:
         ECR_REPOSITORY: motilayo/rpsgame
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --file ..\..\dockerfile 
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --file ../../dockerfile 
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     - name: Log out of Amazon ECR
