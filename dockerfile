@@ -8,4 +8,5 @@ RUN npm run build --prod
 
 # Stage 2
 FROM nginx
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-prod /usr/src/app/dist/rpsgame/ /usr/share/nginx/html
