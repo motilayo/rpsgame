@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import {
   MatTableDataSource
 } from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+
 
 
 export interface GameRound{
@@ -15,7 +17,7 @@ export interface GameRound{
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit{
   title = 'Rock Paper Scissors Game';
   username: string;
   userScore = 0;
@@ -28,6 +30,10 @@ export class AppComponent {
   tableColumns: string[] = ['user', 'computer', 'result'];
   tableRow: GameRound[] = [];
   dataSource = new MatTableDataSource<GameRound>(this.tableRow);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   // tslint:disable-next-line: typedef
 setComputerChoice(){
@@ -67,7 +73,7 @@ evaluate(){
         this.outcome = 'DRAW!';
     }
 
-    this.tableRow.push({
+    this.tableRow.unshift({
       user: this.userChoice,
       computer: this.computerChoice,
       result: this.outcome

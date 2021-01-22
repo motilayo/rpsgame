@@ -53,17 +53,29 @@ table {
     width: 95%;
 }
 
+
+/* #table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+} */
+
+mat-paginator {
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+}
+
 th {
     font-weight: bolder;
     font-size: x-large;
-    font-family: fantasy;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: aliceblue;
 }
 
 td {
     font-weight: bold;
     font-size: large;
-    font-family: "Gill Sans", sans-serif;
     vertical-align: middle;
 }
 
@@ -78,15 +90,16 @@ td {
 }
 
 mat-grid-tile-header {
+    width: 50%;
     justify-content: center;
 }
 
 mat-card {
-    width: 200px;
+    width: 85%;
     text-align: center;
+    justify-content: center;
 }
 
-mat-card-header {
-    height: 100px;
-    display: flex;
+mat-card-title {
+    text-align: center;
 }
