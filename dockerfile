@@ -1,5 +1,5 @@
 # Stage 1
-FROM node as build-prod
+FROM node as builder
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm install
@@ -8,7 +8,6 @@ RUN npm run build --prod
 
 # Stage 2
 FROM nginx
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=build-prod /usr/src/app/dist/rpsgame/ /usr/share/nginx/html
+COPY --from=builder /usr/src/app/dist/rpsgame/ /usr/share/nginx/html
+COPY --from=builder /usr/src/app/docker/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-EXPOSE 443
