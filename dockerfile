@@ -12,3 +12,4 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /usr/src/app/dist/rpsgame/ /usr/share/nginx/html
 
 EXPOSE 80
+EXPOSE 443
