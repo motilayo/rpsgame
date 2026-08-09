@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ephemeral-env-rpsgame-
+  namespace: argo-workflows
+spec:
+  workflowTemplateRef:
+    clusterScope: true
+    name: ephemeral-environment
+  arguments:
+    parameters:
+      - name: tenant_name
+        value: "feat-rpsgame-modern"
+      - name: ttl
+        value: "72h"
+      - name: components
+        value: '[{"repo":"rpsgame","branch":"feat/modernization","manifest_path":"deploy/","build":true,"image_name":"rpsgame","dockerfile":"dockerfile","context_dir":"."}]'

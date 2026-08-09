@@ -1,0 +1,48 @@
+apiVersion: platform.kdg.io/v1alpha3
+kind: AppWorkload
+metadata:
+  name: rpsgame-preview
+spec:
+  environment: dev
+  type: stateless
+  image: rpsgame:placeholder
+  port: 8080
+  expose:
+    hostname: placeholder.example.com
+    pathPrefix: /
+    visibility: public
+  env:
+    API_URL: https://PLACEHOLDER/api
+    AUTH_URL: https://PLACEHOLDER
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+  emptyDirs:
+    - name: tmp-volume
+      mountPath: /tmp
+    - name: nginx-cache
+      mountPath: /var/cache/nginx
+    - name: nginx-run
+      mountPath: /var/run
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 8080
+    initialDelaySeconds: 20
+    periodSeconds: 20
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10

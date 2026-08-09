@@ -1,58 +1,207 @@
-<p>
-    <mat-toolbar color>
-        <span>Rock Paper Scissors Game</span>
-    </mat-toolbar>
-</p>
-
-<mat-grid-list cols="2" rowHeight="1:1" [gutterSize]="'10%'">
-    <!-- <mat-grid-tile-header>SCORE</mat-grid-tile-header> -->
-    <mat-grid-tile>
-        <mat-card>
-            <mat-card-title>USER</mat-card-title>
-            <mat-card-content>{{userScore}}</mat-card-content>
-        </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <mat-card>
-            <mat-card-title>COMPUTER</mat-card-title>
-            <mat-card-content>{{computerScore}}</mat-card-content>
-        </mat-card>
-    </mat-grid-tile>
-</mat-grid-list>
-
-
-<div class="choices">
-    <div class="choice" id="rock">
-        <img src="../assets/images/rock.png " width="75 " height="75 " (click)='userChoose("rock")'>
+<!-- Modern Rock Paper Scissors Header -->
+<mat-toolbar class="game-header">
+  <div class="header-content">
+    <div class="title-section">
+      <span class="game-title">⚡ Rock Paper Scissors</span>
     </div>
-    <div class="choice" id="paper">
-        <img src="../assets/images/paper.png " width="75 " height="75 " (click)='userChoose("paper")'>
+    
+    <!-- Mode Switcher -->
+    <div class="mode-switcher">
+      <button class="mode-btn" [ngClass]="{'active': gameMode === 'vs-computer'}" (click)="setGameMode('vs-computer')">
+        🤖 VS AI
+      </button>
+      <button class="mode-btn" [ngClass]="{'active': gameMode === 'online'}" (click)="setGameMode('online')">
+        🌐 ONLINE MULTIPLAYER
+      </button>
     </div>
-    <div class="choice" id="scissors">
-        <img src="../assets/images/scissors.png " width="75 " height="75 " (click)='userChoose("scissors")'>
+
+    <div class="stats-bar">
+      <div class="stat-item" title="Current Win Streak">
+        <span class="stat-label">STREAK</span>
+        <span class="stat-value streak-value">🔥 {{currentStreak}}</span>
+      </div>
+      <div class="stat-item" title="Best Win Streak">
+        <span class="stat-label">BEST</span>
+        <span class="stat-value">🏆 {{bestStreak}}</span>
+      </div>
+      <div class="stat-item" title="Win Rate Percentage">
+        <span class="stat-label">WIN RATE</span>
+        <span class="stat-value">{{winRate}}%</span>
+      </div>
+      <button class="reset-btn" (click)="resetStats()" title="Reset Scoreboard and History">
+        <span class="material-icons">refresh</span> Reset
+      </button>
     </div>
-</div>
+  </div>
+</mat-toolbar>
 
-<br/>
+<main class="game-container">
+  <!-- Online Multiplayer Lobby Card -->
+  <div class="lobby-card float-in" *ngIf="gameMode === 'online'">
+    <div class="lobby-header">
+      <h3 class="lobby-title">🌐 WebRTC P2P Multiplayer Lobby</h3>
+      <span class="status-indicator" [ngClass]="{'online': isConnected, 'waiting': myPeerId && !isConnected}">
+        {{ isConnected ? '🟢 Connected to ' + opponentName : (myPeerId ? '🟡 Waiting for Player 2...' : '⚪ Offline') }}
+      </span>
+    </div>
 
-<div id="table" class="mat-elevation-z8">
-    <table mat-table [dataSource]='dataSource'>
+    <div class="lobby-controls" *ngIf="!isConnected && !myPeerId">
+      <button class="action-btn create-btn" (click)="createOnlineRoom()">
+        <span class="material-icons">add_link</span> Create Room
+      </button>
+      
+      <div class="divider">OR</div>
+
+      <div class="join-box">
+        <input type="text" class="room-input" #roomInput [value]="targetRoomId" (input)="targetRoomId = roomInput.value" placeholder="Enter Room Code (e.g. RPS-4912)" (keyup.enter)="joinOnlineRoom(roomInput.value)">
+        <button class="action-btn join-btn" (click)="joinOnlineRoom(roomInput.value)" [disabled]="!targetRoomId.trim()">
+          Join Room
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Room Display -->
+    <div class="room-info" *ngIf="myPeerId || isConnected">
+      <div class="room-code-box">
+        <span class="room-code-label">ROOM CODE:</span>
+        <span class="room-code-val">{{connectedRoomId || myPeerId}}</span>
+        <button class="copy-btn" (click)="copyRoomLink()" title="Copy Shareable Link">
+          <span class="material-icons">content_copy</span> Copy Link
+        </button>
+      </div>
+      <span class="copy-toast" *ngIf="copyNotification">✓ Link copied to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- Score Cards -->
+  <div class="scoreboard">
+    <mat-card class="score-card user-card">
+      <mat-card-header>
+        <mat-card-title>PLAYER 1 (YOU)</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="score-number">{{userScore}}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="vs-badge">VS</div>
+
+    <mat-card class="score-card computer-card">
+      <mat-card-header>
+        <mat-card-title>{{opponentName | uppercase}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="score-number">{{computerScore}}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Online Selection Status Banner -->
+  <div class="selection-status-bar" *ngIf="gameMode === 'online' && isConnected && !isBattleActive">
+    <div class="status-pill" [ngClass]="{'ready': hasUserSelected}">
+      {{ hasUserSelected ? '✓ You Locked In' : '⏳ Waiting for your move...' }}
+    </div>
+    <div class="status-pill" [ngClass]="{'ready': hasPeerSelected}">
+      {{ hasPeerSelected ? '✓ Opponent Locked In' : '⏳ Waiting for Opponent...' }}
+    </div>
+  </div>
+
+  <!-- Battle Arena (Current Round Display) -->
+  <div class="battle-arena float-in" *ngIf="isBattleActive">
+    <div class="fighter user-fighter">
+      <div class="fighter-icon" [ngClass]="{'shake-animation': animatingChoice === userChoice}">
+        {{getChoiceIcon(userChoice)}}
+      </div>
+      <div class="fighter-label">{{userChoice | uppercase}}</div>
+    </div>
+
+    <div class="battle-outcome">
+      <div class="result-badge" [ngClass]="{
+        'badge-win': outcome === 'You Win!',
+        'badge-lose': outcome === 'You Lose!',
+        'badge-draw': outcome === 'DRAW!'
+      }">
+        {{outcome}}
+      </div>
+
+      <button class="next-round-btn" *ngIf="gameMode === 'online'" (click)="nextRound()">
+        Play Next Round ➔
+      </button>
+    </div>
+
+    <div class="fighter computer-fighter">
+      <div class="fighter-icon">
+        {{getChoiceIcon(computerChoice)}}
+      </div>
+      <div class="fighter-label">{{computerChoice | uppercase}}</div>
+    </div>
+  </div>
+
+  <!-- Choice Selection Buttons -->
+  <div class="choices-section">
+    <h3 class="choice-prompt">CHOOSE YOUR WEAPON</h3>
+    <div class="choices-grid">
+      <button class="choice-card" id="rock" [ngClass]="{'active': userChoice === 'rock'}" (click)="userChoose('rock')" [disabled]="gameMode === 'online' && (!isConnected || hasUserSelected)">
+        <div class="choice-emoji">🪨</div>
+        <img src="assets/images/rock.png" alt="Rock" class="choice-img" (error)="$any($event.target).style.display='none'">
+        <span class="choice-name">ROCK</span>
+      </button>
+
+      <button class="choice-card" id="paper" [ngClass]="{'active': userChoice === 'paper'}" (click)="userChoose('paper')" [disabled]="gameMode === 'online' && (!isConnected || hasUserSelected)">
+        <div class="choice-emoji">📄</div>
+        <img src="assets/images/paper.png" alt="Paper" class="choice-img" (error)="$any($event.target).style.display='none'">
+        <span class="choice-name">PAPER</span>
+      </button>
+
+      <button class="choice-card" id="scissors" [ngClass]="{'active': userChoice === 'scissors'}" (click)="userChoose('scissors')" [disabled]="gameMode === 'online' && (!isConnected || hasUserSelected)">
+        <div class="choice-emoji">✂️</div>
+        <img src="assets/images/scissors.png" alt="Scissors" class="choice-img" (error)="$any($event.target).style.display='none'">
+        <span class="choice-name">SCISSORS</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- History Table -->
+  <div class="history-section">
+    <h3 class="history-title">MATCH HISTORY</h3>
+    
+    <div id="table" class="mat-elevation-z8 history-table-container">
+      <table mat-table [dataSource]="dataSource" class="history-table">
+        <!-- User Column -->
         <ng-container matColumnDef="user">
-            <th mat-header-cell *matHeaderCellDef> User </th>
-            <td mat-cell *matCellDef='let element'> {{element.user}} </td>
+          <th mat-header-cell *matHeaderCellDef> PLAYER 1 </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="cell-choice">{{getChoiceIcon(element.user)}} {{element.user | titlecase}}</span>
+          </td>
         </ng-container>
+
+        <!-- Computer Column -->
         <ng-container matColumnDef="computer">
-            <th mat-header-cell *matHeaderCellDef> Computer </th>
-            <td mat-cell *matCellDef='let element'> {{element.computer}} </td>
+          <th mat-header-cell *matHeaderCellDef> {{gameMode === 'online' ? 'OPPONENT' : 'COMPUTER'}} </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="cell-choice">{{getChoiceIcon(element.computer)}} {{element.computer | titlecase}}</span>
+          </td>
         </ng-container>
+
+        <!-- Result Column -->
         <ng-container matColumnDef="result">
-            <th mat-header-cell *matHeaderCellDef> Result </th>
-            <td mat-cell *matCellDef='let element'> {{element.result}} </td>
+          <th mat-header-cell *matHeaderCellDef> RESULT </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="table-badge" [ngClass]="{
+              'badge-win': element.result === 'You Win!',
+              'badge-lose': element.result === 'You Lose!',
+              'badge-draw': element.result === 'DRAW!'
+            }">
+              {{element.result}}
+            </span>
+          </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="tableColumns " style="background-color: #084075; "></tr>
-        <tr mat-row *matRowDef="let row; columns: tableColumns; " [ngClass]="{ 'lose': row.result=='You Lose!' , 'win':row.result=='You Win!' , 'draw': row.result=='DRAW!' } "></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+      </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-</div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</main>

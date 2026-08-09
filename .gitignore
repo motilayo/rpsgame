@@ -48,3 +48,5 @@ Thumbs.db
 
 # kubernetes yaml files
 /kubernetes
+
+AGENTS.md

@@ -1,0 +1,15 @@
+{
+  "tenant_name": "feat-rpsgame-modern",
+  "ttl": "72h",
+  "components": [
+    {
+      "repo": "rpsgame",
+      "branch": "feat/modernization",
+      "manifest_path": "deploy/",
+      "build": true,
+      "image_name": "rpsgame",
+      "dockerfile": "dockerfile",
+      "context_dir": "."
+    }
+  ]
+}
