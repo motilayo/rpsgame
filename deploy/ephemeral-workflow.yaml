@@ -14,4 +14,4 @@ spec:
       - name: ttl
         value: "72h"
       - name: components
-        value: '[{"repo":"kudegowo/rpsgame","branch":"feat/modernization","manifest_path":"deploy/","build":true,"image_name":"rpsgame","dockerfile":"dockerfile","context_dir":".","visibility":"private"}]'
+        value: '[{"repo":"motilayo/rpsgame","branch":"feat/modernization","manifest_path":"deploy/","build":true,"image_name":"rpsgame","dockerfile":"dockerfile","context_dir":".","visibility":"private"}]'

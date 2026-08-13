@@ -3,7 +3,7 @@
   "ttl": "72h",
   "components": [
     {
-      "repo": "kudegowo/rpsgame",
+      "repo": "motilayo/rpsgame",
       "branch": "feat/modernization",
       "manifest_path": "deploy/",
       "build": true,
