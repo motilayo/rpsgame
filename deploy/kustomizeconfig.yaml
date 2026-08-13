@@ -1,6 +1,4 @@
-nameReference:
-varReference:
-  - path: spec/env/API_URL
+images:
+  - path: spec/image
     kind: AppWorkload
-  - path: spec/env/AUTH_URL
-    kind: AppWorkload
+
