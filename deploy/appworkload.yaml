@@ -10,10 +10,7 @@ spec:
   expose:
     hostname: placeholder.example.com
     pathPrefix: /
-    visibility: public
-  env:
-    API_URL: https://PLACEHOLDER/api
-    AUTH_URL: https://PLACEHOLDER
+    visibility: private
   resources:
     requests:
       cpu: "100m"

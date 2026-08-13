@@ -7,18 +7,3 @@ commonLabels:
   team: rpsgame
 configurations:
   - kustomizeconfig.yaml
-replacements:
-  - source:
-      kind: AppWorkload
-      name: rpsgame-preview
-      fieldPath: spec.expose.hostname
-    targets:
-      - select:
-          kind: AppWorkload
-          name: rpsgame-preview
-        fieldPaths:
-          - spec.env.API_URL
-          - spec.env.AUTH_URL
-        options:
-          delimiter: '/'
-          index: 2

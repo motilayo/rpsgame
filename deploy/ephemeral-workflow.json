@@ -3,13 +3,14 @@
   "ttl": "72h",
   "components": [
     {
-      "repo": "rpsgame",
+      "repo": "kudegowo/rpsgame",
       "branch": "feat/modernization",
       "manifest_path": "deploy/",
       "build": true,
       "image_name": "rpsgame",
       "dockerfile": "dockerfile",
-      "context_dir": "."
+      "context_dir": ".",
+      "visibility": "private"
     }
   ]
 }
