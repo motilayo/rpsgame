@@ -4,23 +4,21 @@
 }
 
 .choices {
-    display: grid;
+    display: flex;
     justify-content: center;
     align-content: center;
-    grid-auto-flow: column;
     gap: 10%;
+    margin-top: 20px;
 }
 
 .choice {
-    width: 33%;
-    float: left;
     position: relative;
+    cursor: pointer;
 }
 
-.choice::after {
-    content: "";
-    display: table;
-    clear: both;
+.choice.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 #rock {
@@ -53,13 +51,6 @@ table {
     width: 95%;
 }
 
-
-/* #table {
-    margin-left: auto;
-    margin-right: auto;
-    width: 95%;
-} */
-
 mat-paginator {
     margin-left: auto;
     margin-right: auto;
@@ -86,11 +77,6 @@ td {
 
 .mat-cell {
     text-align: center;
-    justify-content: center;
-}
-
-mat-grid-tile-header {
-    width: 50%;
     justify-content: center;
 }
 
