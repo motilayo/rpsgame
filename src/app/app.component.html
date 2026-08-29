@@ -1,58 +1,74 @@
 <p>
-    <mat-toolbar color>
-        <span>Rock Paper Scissors Game</span>
-    </mat-toolbar>
+  <mat-toolbar color="primary">
+      <span>Rock Paper Scissors Game</span>
+      <span style="flex: 1 1 auto;"></span>
+      <button mat-button *ngIf="mode !== 'menu'" (click)="exitToMenu()">Exit</button>
+  </mat-toolbar>
 </p>
 
-<mat-grid-list cols="2" rowHeight="1:1" [gutterSize]="'10%'">
-    <!-- <mat-grid-tile-header>SCORE</mat-grid-tile-header> -->
-    <mat-grid-tile>
-        <mat-card>
-            <mat-card-title>USER</mat-card-title>
-            <mat-card-content>{{userScore}}</mat-card-content>
-        </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <mat-card>
-            <mat-card-title>COMPUTER</mat-card-title>
-            <mat-card-content>{{computerScore}}</mat-card-content>
-        </mat-card>
-    </mat-grid-tile>
-</mat-grid-list>
-
-
-<div class="choices">
-    <div class="choice" id="rock">
-        <img src="../assets/images/rock.png " width="75 " height="75 " (click)='userChoose("rock")'>
-    </div>
-    <div class="choice" id="paper">
-        <img src="../assets/images/paper.png " width="75 " height="75 " (click)='userChoose("paper")'>
-    </div>
-    <div class="choice" id="scissors">
-        <img src="../assets/images/scissors.png " width="75 " height="75 " (click)='userChoose("scissors")'>
-    </div>
+<div *ngIf="mode === 'menu'" style="text-align: center; margin-top: 50px;">
+  <button mat-raised-button color="primary" style="margin: 10px;" (click)="playComputer()">Play vs Computer</button>
+  <button mat-raised-button color="accent" style="margin: 10px;" (click)="playOnline()">Play Online</button>
 </div>
 
-<br/>
+<div *ngIf="mode === 'matchmaking'" style="text-align: center; margin-top: 50px;">
+  <h2>Looking for an opponent...</h2>
+</div>
 
-<div id="table" class="mat-elevation-z8">
-    <table mat-table [dataSource]='dataSource'>
-        <ng-container matColumnDef="user">
-            <th mat-header-cell *matHeaderCellDef> User </th>
-            <td mat-cell *matCellDef='let element'> {{element.user}} </td>
-        </ng-container>
-        <ng-container matColumnDef="computer">
-            <th mat-header-cell *matHeaderCellDef> Computer </th>
-            <td mat-cell *matCellDef='let element'> {{element.computer}} </td>
-        </ng-container>
-        <ng-container matColumnDef="result">
-            <th mat-header-cell *matHeaderCellDef> Result </th>
-            <td mat-cell *matCellDef='let element'> {{element.result}} </td>
-        </ng-container>
+<div *ngIf="mode === 'computer' || mode === 'online'">
+  <mat-grid-list cols="2" rowHeight="1:1" [gutterSize]="'10%'">
+      <mat-grid-tile>
+          <mat-card>
+              <mat-card-title>YOU</mat-card-title>
+              <mat-card-content>{{mode === 'online' ? onlineScore.you : userScore}}</mat-card-content>
+          </mat-card>
+      </mat-grid-tile>
+      <mat-grid-tile>
+          <mat-card>
+              <mat-card-title>{{mode === 'online' ? 'OPPONENT' : 'COMPUTER'}}</mat-card-title>
+              <mat-card-content>{{mode === 'online' ? onlineScore.opponent : computerScore}}</mat-card-content>
+          </mat-card>
+      </mat-grid-tile>
+  </mat-grid-list>
 
-        <tr mat-header-row *matHeaderRowDef="tableColumns " style="background-color: #084075; "></tr>
-        <tr mat-row *matRowDef="let row; columns: tableColumns; " [ngClass]="{ 'lose': row.result=='You Lose!' , 'win':row.result=='You Win!' , 'draw': row.result=='DRAW!' } "></tr>
-    </table>
+  <div style="text-align: center; margin-top: 20px; min-height: 30px;">
+    <h2>{{outcome}}</h2>
+    <h3 *ngIf="mode === 'online' && userChoice && !outcome">Waiting for opponent...</h3>
+  </div>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <div class="choices">
+      <div class="choice" id="rock" (click)='userChoose("rock")' [class.disabled]="userChoice">
+          <img src="assets/images/rock.png" width="75" height="75">
+      </div>
+      <div class="choice" id="paper" (click)='userChoose("paper")' [class.disabled]="userChoice">
+          <img src="assets/images/paper.png" width="75" height="75">
+      </div>
+      <div class="choice" id="scissors" (click)='userChoose("scissors")' [class.disabled]="userChoice">
+          <img src="assets/images/scissors.png" width="75" height="75">
+      </div>
+  </div>
+
+  <br/>
+
+  <div id="table" class="mat-elevation-z8">
+      <table mat-table [dataSource]='dataSource'>
+          <ng-container matColumnDef="user">
+              <th mat-header-cell *matHeaderCellDef> User </th>
+              <td mat-cell *matCellDef='let element'> {{element.user}} </td>
+          </ng-container>
+          <ng-container matColumnDef="computer">
+              <th mat-header-cell *matHeaderCellDef> {{mode === 'online' ? 'Opponent' : 'Computer'}} </th>
+              <td mat-cell *matCellDef='let element'> {{element.computer}} </td>
+          </ng-container>
+          <ng-container matColumnDef="result">
+              <th mat-header-cell *matHeaderCellDef> Result </th>
+              <td mat-cell *matCellDef='let element'> {{element.result}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="tableColumns" style="background-color: #084075;"></tr>
+          <tr mat-row *matRowDef="let row; columns: tableColumns;" [ngClass]="{ 'lose': row.result=='You Lose!' , 'win':row.result=='You Win!' , 'draw': row.result=='DRAW!' }"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
 </div>
